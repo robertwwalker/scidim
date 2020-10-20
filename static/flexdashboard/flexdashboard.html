@@ -1,0 +1,271 @@
+---
+title: "Natural Gas dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true            
+    theme: yeti
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="/rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
+<link href="/rmarkdown-libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/datatables-binding/datatables.js"></script>
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/dt-core/js/jquery.dataTables.min.js"></script>
+
+
+<div id="newspapers" class="section level3">
+<h3>Newspapers</h3>
+<pre class="r"><code>ggplot(Newspapers, aes(x=Price, fill=Location)) + geom_density(alpha=0.2) + scale_fill_viridis_d()</code></pre>
+<p><img src="static/flexdashboard/flexdashboard_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<hr />
+<p>Two key features are of note:</p>
+<ol style="list-style-type: decimal">
+<li>The average price is clearly lower at Henry Hub<br />
+</li>
+<li>The amount of variation at Henry Hub is considerably larger than at Tianjin in spite of the fact that the average is lower.</li>
+</ol>
+</div>
+<div id="newspapers-summary" class="section level3">
+<h3>Newspapers: Summary</h3>
+<pre class="r"><code>skimr::skim(Newspapers)</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Newspapers</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">61</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">7</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">POSIXct</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Location</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">Hen: 36, Tia: 25</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Price</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">3.88</td>
+<td align="right">0.15</td>
+<td align="right">3.52</td>
+<td align="right">3.77</td>
+<td align="right">3.92</td>
+<td align="right">4.00</td>
+<td align="right">4.07</td>
+<td align="left">▂▃▃▅▇</td>
+</tr>
+<tr class="even">
+<td align="left">HHPrice</td>
+<td align="right">25</td>
+<td align="right">0.59</td>
+<td align="right">3.80</td>
+<td align="right">0.14</td>
+<td align="right">3.52</td>
+<td align="right">3.69</td>
+<td align="right">3.80</td>
+<td align="right">3.90</td>
+<td align="right">4.07</td>
+<td align="left">▃▆▇▆▃</td>
+</tr>
+<tr class="odd">
+<td align="left">TianjinPrice</td>
+<td align="right">36</td>
+<td align="right">0.41</td>
+<td align="right">3.99</td>
+<td align="right">0.05</td>
+<td align="right">3.88</td>
+<td align="right">3.98</td>
+<td align="right">4.00</td>
+<td align="right">4.04</td>
+<td align="right">4.05</td>
+<td align="left">▂▂▂▇▇</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: POSIXct</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">min</th>
+<th align="left">max</th>
+<th align="left">median</th>
+<th align="right">n_unique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Date</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="left">2013-05-04</td>
+<td align="left">2013-10-30</td>
+<td align="left">2013-08-06 00:00:00</td>
+<td align="right">61</td>
+</tr>
+<tr class="even">
+<td align="left">HHDate</td>
+<td align="right">25</td>
+<td align="right">0.59</td>
+<td align="left">2013-05-04</td>
+<td align="left">2013-10-25</td>
+<td align="left">2013-07-29 12:00:00</td>
+<td align="right">36</td>
+</tr>
+<tr class="odd">
+<td align="left">TianjinDate</td>
+<td align="right">36</td>
+<td align="right">0.41</td>
+<td align="left">2013-05-05</td>
+<td align="left">2013-10-30</td>
+<td align="left">2013-08-13 00:00:00</td>
+<td align="right">25</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>Two key features are of note:</p>
+<ol style="list-style-type: decimal">
+<li>The average price is clearly lower at Henry Hub<br />
+</li>
+<li>The amount of variation at Henry Hub is considerably larger than at Tianjin in spite of the fact that the average is lower.</li>
+</ol>
+</div>
+<div id="experts" class="section level3">
+<h3>Experts</h3>
+<pre class="r"><code>ggplot(Experts, aes(x=Location, fill=Build)) + geom_bar() + expand_limits(y=100) + scale_fill_viridis_d()</code></pre>
+<p><img src="static/flexdashboard/flexdashboard_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<hr />
+<p>Almost everything that we wish to know can be discerned from this.</p>
+<ol style="list-style-type: decimal">
+<li>Because we can see 100 on the y-axis, we can get a sense of the missing responses; there are far more for Tianjin than Henry Hub.<br />
+</li>
+<li>Experts clearly favor Henry Hub; the split in Build/No is nearly even for Tianjin but overwhelmingly favors Build for Henry Hub.</li>
+</ol>
+</div>
+<div id="experts-tables" class="section level3">
+<h3>Experts: Tables</h3>
+<p>The Raw Table</p>
+<center>
+<pre class="r"><code>Experts %&gt;% janitor::tabyl(Location,Build) %&gt;% janitor::adorn_totals(c(&quot;row&quot;,&quot;col&quot;))</code></pre>
+<pre><code>##  Location Build No Total
+##  HenryHub    66 15    81
+##   Tianjin    31 33    64
+##     Total    97 48   145</code></pre>
+</center>
+<p>A Percentage Table</p>
+<center>
+<pre class="r"><code>Experts %&gt;% janitor::tabyl(Location,Build) %&gt;% janitor::adorn_percentages()</code></pre>
+<pre><code>##  Location     Build        No
+##  HenryHub 0.8148148 0.1851852
+##   Tianjin 0.4843750 0.5156250</code></pre>
+</center>
+<hr />
+<ol style="list-style-type: decimal">
+<li>Henry Hub has far more responses and more favorable responses than Tianjin.</li>
+<li>Experts clearly favor Henry Hub; the split in Build/No is nearly even for Tianjin but overwhelmingly favors Build for Henry Hub.</li>
+</ol>
+</div>
+<div id="forecast" class="section level3">
+<h3>Forecast</h3>
+<pre class="r"><code>options(scipen=10)
+ggplotly(ggplot(Forecast, aes(x=Period, y=Forecast, color=Location)) + geom_line() + geom_point() + scale_color_viridis_d())</code></pre>
+<div id="htmlwidget-1" style="width:672px;height:224px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52],"y":[3098422,3606300,4413385,4567793,2798252,2740368,5756915,5650688,4267043,3296090,6778847,2684719,5970096,2156440,3195131,3618057,4735241,5867650,2562005,1879944,3663712,4837979,7071457,5393938,5310069,2310512,1965588,6162814,5455554,2564360,5926260,2398289,7166874,6976819,5394053,2568165,5672726,5477587,4468600,2645540,1712033,4217897,6495690,3922418,2337244,3517452,3044256,3038180,4475113,6564413,3985750,2247965],"text":["Period:  1<br />Forecast: 3098422<br />Location: HenryHub","Period:  2<br />Forecast: 3606300<br />Location: HenryHub","Period:  3<br />Forecast: 4413385<br />Location: HenryHub","Period:  4<br />Forecast: 4567793<br />Location: HenryHub","Period:  5<br />Forecast: 2798252<br />Location: HenryHub","Period:  6<br />Forecast: 2740368<br />Location: HenryHub","Period:  7<br />Forecast: 5756915<br />Location: HenryHub","Period:  8<br />Forecast: 5650688<br />Location: HenryHub","Period:  9<br />Forecast: 4267043<br />Location: HenryHub","Period: 10<br />Forecast: 3296090<br />Location: HenryHub","Period: 11<br />Forecast: 6778847<br />Location: HenryHub","Period: 12<br />Forecast: 2684719<br />Location: HenryHub","Period: 13<br />Forecast: 5970096<br />Location: HenryHub","Period: 14<br />Forecast: 2156440<br />Location: HenryHub","Period: 15<br />Forecast: 3195131<br />Location: HenryHub","Period: 16<br />Forecast: 3618057<br />Location: HenryHub","Period: 17<br />Forecast: 4735241<br />Location: HenryHub","Period: 18<br />Forecast: 5867650<br />Location: HenryHub","Period: 19<br />Forecast: 2562005<br />Location: HenryHub","Period: 20<br />Forecast: 1879944<br />Location: HenryHub","Period: 21<br />Forecast: 3663712<br />Location: HenryHub","Period: 22<br />Forecast: 4837979<br />Location: HenryHub","Period: 23<br />Forecast: 7071457<br />Location: HenryHub","Period: 24<br />Forecast: 5393938<br />Location: HenryHub","Period: 25<br />Forecast: 5310069<br />Location: HenryHub","Period: 26<br />Forecast: 2310512<br />Location: HenryHub","Period: 27<br />Forecast: 1965588<br />Location: HenryHub","Period: 28<br />Forecast: 6162814<br />Location: HenryHub","Period: 29<br />Forecast: 5455554<br />Location: HenryHub","Period: 30<br />Forecast: 2564360<br />Location: HenryHub","Period: 31<br />Forecast: 5926260<br />Location: HenryHub","Period: 32<br />Forecast: 2398289<br />Location: HenryHub","Period: 33<br />Forecast: 7166874<br />Location: HenryHub","Period: 34<br />Forecast: 6976819<br />Location: HenryHub","Period: 35<br />Forecast: 5394053<br />Location: HenryHub","Period: 36<br />Forecast: 2568165<br />Location: HenryHub","Period: 37<br />Forecast: 5672726<br />Location: HenryHub","Period: 38<br />Forecast: 5477587<br />Location: HenryHub","Period: 39<br />Forecast: 4468600<br />Location: HenryHub","Period: 40<br />Forecast: 2645540<br />Location: HenryHub","Period: 41<br />Forecast: 1712033<br />Location: HenryHub","Period: 42<br />Forecast: 4217897<br />Location: HenryHub","Period: 43<br />Forecast: 6495690<br />Location: HenryHub","Period: 44<br />Forecast: 3922418<br />Location: HenryHub","Period: 45<br />Forecast: 2337244<br />Location: HenryHub","Period: 46<br />Forecast: 3517452<br />Location: HenryHub","Period: 47<br />Forecast: 3044256<br />Location: HenryHub","Period: 48<br />Forecast: 3038180<br />Location: HenryHub","Period: 49<br />Forecast: 4475113<br />Location: HenryHub","Period: 50<br />Forecast: 6564413<br />Location: HenryHub","Period: 51<br />Forecast: 3985750<br />Location: HenryHub","Period: 52<br />Forecast: 2247965<br />Location: HenryHub"],"type":"scatter","mode":"lines+markers","line":{"width":1.88976377952756,"color":"rgba(68,1,84,1)","dash":"solid"},"hoveron":"points","name":"HenryHub","legendgroup":"HenryHub","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(68,1,84,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(68,1,84,1)"}},"frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52],"y":[2894143,3436784,4101907,4351314,2351514,2270174,5452294,5259389,4038561,2882140,6404078,2363443,5670960,1818329,3033642,3203306,4208041,5541472,2252344,1604932,3456988,4421606,6761850,5148802,4871142,1924523,1815230,5748518,5149951,2280916,5505182,1994935,6623336,6510467,4928639,2203393,5419757,5177381,3942133,2290494,1525784,3772579,6171272,3654803,2018557,3091920,2768268,2687385,4195901,6028336,3644003,1877885],"text":["Period:  1<br />Forecast: 2894143<br />Location: Tianjin","Period:  2<br />Forecast: 3436784<br />Location: Tianjin","Period:  3<br />Forecast: 4101907<br />Location: Tianjin","Period:  4<br />Forecast: 4351314<br />Location: Tianjin","Period:  5<br />Forecast: 2351514<br />Location: Tianjin","Period:  6<br />Forecast: 2270174<br />Location: Tianjin","Period:  7<br />Forecast: 5452294<br />Location: Tianjin","Period:  8<br />Forecast: 5259389<br />Location: Tianjin","Period:  9<br />Forecast: 4038561<br />Location: Tianjin","Period: 10<br />Forecast: 2882140<br />Location: Tianjin","Period: 11<br />Forecast: 6404078<br />Location: Tianjin","Period: 12<br />Forecast: 2363443<br />Location: Tianjin","Period: 13<br />Forecast: 5670960<br />Location: Tianjin","Period: 14<br />Forecast: 1818329<br />Location: Tianjin","Period: 15<br />Forecast: 3033642<br />Location: Tianjin","Period: 16<br />Forecast: 3203306<br />Location: Tianjin","Period: 17<br />Forecast: 4208041<br />Location: Tianjin","Period: 18<br />Forecast: 5541472<br />Location: Tianjin","Period: 19<br />Forecast: 2252344<br />Location: Tianjin","Period: 20<br />Forecast: 1604932<br />Location: Tianjin","Period: 21<br />Forecast: 3456988<br />Location: Tianjin","Period: 22<br />Forecast: 4421606<br />Location: Tianjin","Period: 23<br />Forecast: 6761850<br />Location: Tianjin","Period: 24<br />Forecast: 5148802<br />Location: Tianjin","Period: 25<br />Forecast: 4871142<br />Location: Tianjin","Period: 26<br />Forecast: 1924523<br />Location: Tianjin","Period: 27<br />Forecast: 1815230<br />Location: Tianjin","Period: 28<br />Forecast: 5748518<br />Location: Tianjin","Period: 29<br />Forecast: 5149951<br />Location: Tianjin","Period: 30<br />Forecast: 2280916<br />Location: Tianjin","Period: 31<br />Forecast: 5505182<br />Location: Tianjin","Period: 32<br />Forecast: 1994935<br />Location: Tianjin","Period: 33<br />Forecast: 6623336<br />Location: Tianjin","Period: 34<br />Forecast: 6510467<br />Location: Tianjin","Period: 35<br />Forecast: 4928639<br />Location: Tianjin","Period: 36<br />Forecast: 2203393<br />Location: Tianjin","Period: 37<br />Forecast: 5419757<br />Location: Tianjin","Period: 38<br />Forecast: 5177381<br />Location: Tianjin","Period: 39<br />Forecast: 3942133<br />Location: Tianjin","Period: 40<br />Forecast: 2290494<br />Location: Tianjin","Period: 41<br />Forecast: 1525784<br />Location: Tianjin","Period: 42<br />Forecast: 3772579<br />Location: Tianjin","Period: 43<br />Forecast: 6171272<br />Location: Tianjin","Period: 44<br />Forecast: 3654803<br />Location: Tianjin","Period: 45<br />Forecast: 2018557<br />Location: Tianjin","Period: 46<br />Forecast: 3091920<br />Location: Tianjin","Period: 47<br />Forecast: 2768268<br />Location: Tianjin","Period: 48<br />Forecast: 2687385<br />Location: Tianjin","Period: 49<br />Forecast: 4195901<br />Location: Tianjin","Period: 50<br />Forecast: 6028336<br />Location: Tianjin","Period: 51<br />Forecast: 3644003<br />Location: Tianjin","Period: 52<br />Forecast: 1877885<br />Location: Tianjin"],"type":"scatter","mode":"lines+markers","line":{"width":1.88976377952756,"color":"rgba(253,231,37,1)","dash":"solid"},"hoveron":"points","name":"Tianjin","legendgroup":"Tianjin","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(253,231,37,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(253,231,37,1)"}},"frame":null}],"layout":{"margin":{"t":37.9668413471852,"r":7.30593607305936,"b":51.9211792467286,"l":66.4840182648402},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1.55,54.55],"tickmode":"array","ticktext":["0","10","20","30","40","50"],"tickvals":[0,10,20,30,40,50],"categoryorder":"array","categoryarray":["0","10","20","30","40","50"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":{"text":"Period","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1243729.5,7448928.5],"tickmode":"array","ticktext":["2000000","4000000","6000000"],"tickvals":[2000000,4000000,6000000],"categoryorder":"array","categoryarray":["2000000","4000000","6000000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":{"text":"Forecast","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"y":0.9302436188765},"annotations":[{"text":"Location","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"2fcce5f74848f":{"x":{},"y":{},"colour":{},"type":"scatter"},"2fcce6006a0ff":{"x":{},"y":{},"colour":{}}},"cur_data":"2fcce5f74848f","visdat":{"2fcce5f74848f":["function (y) ","x"],"2fcce6006a0ff":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<hr />
+<p>Two things are of note:<br />
+1. The data are paired by period; that is the point of the calibration exercise.<br />
+2. <em>Henry Hub</em> is almost always forecast higher than Tianjin. Choose a period and you can hover over the associated values to convince yourself of this. Compare the two forecasts for any given period; they are almost always higher for Henry Hub.</p>
+</div>
+<div id="forecast-data" class="section level3">
+<h3>Forecast: Data</h3>
+<pre class="r"><code>Forecast %&gt;% mutate(Difference = HenryHubForecast - TianjinForecast) %&gt;% select(Period, HenryHubForecast, TianjinForecast, Difference) %&gt;% tidyr::drop_na(Difference) %&gt;% DT::datatable(.)</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52],[3098422,3606300,4413385,4567793,2798252,2740368,5756915,5650688,4267043,3296090,6778847,2684719,5970096,2156440,3195131,3618057,4735241,5867650,2562005,1879944,3663712,4837979,7071457,5393938,5310069,2310512,1965588,6162814,5455554,2564360,5926260,2398289,7166874,6976819,5394053,2568165,5672726,5477587,4468600,2645540,1712033,4217897,6495690,3922418,2337244,3517452,3044256,3038180,4475113,6564413,3985750,2247965],[2894143,3436784,4101907,4351314,2351514,2270174,5452294,5259389,4038561,2882140,6404078,2363443,5670960,1818329,3033642,3203306,4208041,5541472,2252344,1604932,3456988,4421606,6761850,5148802,4871142,1924523,1815230,5748518,5149951,2280916,5505182,1994935,6623336,6510467,4928639,2203393,5419757,5177381,3942133,2290494,1525784,3772579,6171272,3654803,2018557,3091920,2768268,2687385,4195901,6028336,3644003,1877885],[204279,169516,311478,216479,446738,470194,304621,391299,228482,413950,374769,321276,299136,338111,161489,414751,527200,326178,309661,275012,206724,416373,309607,245136,438927,385989,150358,414296,305603,283444,421078,403354,543538,466352,465414,364772,252969,300206,526467,355046,186249,445318,324418,267615,318687,425532,275988,350795,279212,536077,341747,370080]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Period<\/th>\n      <th>HenryHubForecast<\/th>\n      <th>TianjinForecast<\/th>\n      <th>Difference<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<hr />
+<p><em>Henry Hub</em> is almost always forecast higher than Tianjin. The difference column captures this perfectly and shows that it always favors Henry Hub.</p>
+</div>

@@ -1,0 +1,4 @@
+theme = "hugo-theme-dimension"
+baseURL = "https://rww.science/"
+languageCode = "en-us"
+title = "rww.science"

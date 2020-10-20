@@ -1,0 +1,90 @@
+---
+title: "Data Files and Variable Types"
+subtitle: "DADM"
+author: "Robert W. Walker"
+institute: "AGSM/Willamette"
+date: "2020/08/27 (updated: 2020-10-19)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+<script src="index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="data-are-ubiquitous" class="section level1">
+<h1>Data are Ubiquitous</h1>
+<p>We can talk about them in terms of formats and types.</p>
+<p><strong>A format describes a machine readable method for storing and transporting data.</strong> Examples include .csv, .tsv, .dta, .xls, .xlsx, .por and many, many others.</p>
+<p><strong>A type (or better, a storage type) describes the language of machine readability for any given variable.</strong> Examples include dates and times, numeric [double/float/single], integer, character, factor, logical [TRUE/FALSE], and complex [combining real and imaginary parts].</p>
+<hr />
+</div>
+<div id="formats" class="section level1">
+<h1>Formats</h1>
+<p>Proprietary software often has a unique data format. Stata has <em>.dta</em> SAS files and SPSS .sav and .por files can be imported.</p>
+<p>We will work with <code>.xls</code> and <code>.xlsx</code> formats most. These are Excel’s spreadsheet formats. These are not generally human readable.</p>
+<p>I often use .csv files; these are basic text files where a comma <em>delimits</em> – separates – cells. These are human readable. <strong>I prefer that in the name of transparency.</strong></p>
+<div id="import-from-excel" class="section level2">
+<h2>Import from Excel</h2>
+<pre class="r"><code>library(readxl)
+url &lt;- &quot;https://github.com/robertwwalker/DADMStuff/raw/master/AnimalCrossing.xlsx&quot;
+destfile &lt;- &quot;ACrossing.xlsx&quot;
+curl::curl_download(url, destfile)
+Critic &lt;- read_excel(destfile, sheet=&quot;critic&quot;)
+Items &lt;- read_excel(destfile, sheet=&quot;Items&quot;)
+Villagers &lt;- read_excel(destfile, sheet=&quot;Villagers&quot;)
+User_reviews &lt;- read_excel(destfile, sheet=&quot;User_reviews&quot;)
+# One of your classmates noted that I mixed up the sheets.
+Items &lt;- read_excel(destfile, sheet=&quot;Villagers&quot;)
+Villagers &lt;- read_excel(destfile, sheet=&quot;Items&quot;)</code></pre>
+<p>Cool. The url for the images are in the data so RMarkdown can access them.</p>
+<p><img src="" alt="admiral" />
+<img src="" alt="angus" /></p>
+</div>
+</div>
+<div id="importing-.csv" class="section level1">
+<h1>Importing .csv</h1>
+<p>Grab the economist data.</p>
+<pre class="r"><code>brexit &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/brexit.csv&quot;)
+corbyn &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/corbyn.csv&quot;)
+eu_balance &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/eu_balance.csv&quot;)
+pensions &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/pensions.csv&quot;)
+dogs &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/dogs.csv&quot;)
+trade &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/trade.csv&quot;)
+women_research &lt;- read.csv(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/women_research.csv&quot;)</code></pre>
+</div>
+<div id="fixing-the-dates" class="section level1">
+<h1>Fixing the Dates</h1>
+<p>Dates are difficult. Generically, they need to scale to hours, minutes, seconds, and perhaps worst, time zones. In addition, they can be formatted in myriad ways.</p>
+<pre class="r"><code>brexit &lt;- brexit %&gt;% mutate(date = as.Date(date, format=&quot;%d/%m/%y&quot;)) # These are dd/mm/yy</code></pre>
+<p>This is important, particularly if we wish to sequence them according to time, and we do when we visualize them.</p>
+</div>
+<div id="a-plot" class="section level1">
+<h1>A Plot</h1>
+<pre class="r"><code>ggplot(brexitL) +
+ aes(x = date, y = Percent, colour = Choice) +
+ geom_line(size = 1L) + geom_point() +
+ scale_color_viridis_d(option = &quot;cividis&quot;) +
+ ggthemes::theme_tufte()</code></pre>
+<hr />
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="better-label-and-geom_text" class="section level1">
+<h1>Better [label and geom_text]</h1>
+<pre class="r"><code>ggplot(pensions) +
+ aes(x = pop_65_percent, y = gov_spend_percent_gdp, label = country) +
+ geom_text() +
+ labs(x = &quot;Population 65+
+&quot;, y = &quot;Government Spending to GDP&quot;) +
+ theme_minimal()</code></pre>
+<hr />
+</div>
+<div id="better-label-and-geom_text-1" class="section level1">
+<h1>Better [label and geom_text]</h1>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>

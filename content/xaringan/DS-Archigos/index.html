@@ -1,0 +1,886 @@
+---
+title: "Visualising Leaders"
+subtitle: "Archigos meets ggplot"
+author: "Robert W. Walker"
+institute: "Atkinson Graduate School of Management"
+date: "2020/06/10 (updated: 2020-10-19)"
+output:
+  xaringan::moon_reader:
+    css: [default, rladies, rladies-fonts, animate.css]
+    seal: false
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+<script src="index_files/header-attrs/header-attrs.js"></script>
+<script src="index_files/kePrint/kePrint.js"></script>
+<link href="index_files/lightable/lightable.css" rel="stylesheet" />
+<script src="index_files/htmlwidgets/htmlwidgets.js"></script>
+<script src="index_files/pymjs/pym.v1.js"></script>
+<script src="index_files/widgetframe-binding/widgetframe.js"></script>
+
+
+<p>class: inverse
+background-image: url(“img/PicAnimNew.gif”)</p>
+<div id="visualising-leaders-archigos-meets-ggplot" class="section level2">
+<h2>Visualising Leaders: Archigos meets ggplot</h2>
+<p>class: inverse</p>
+</div>
+<div id="insights-from-the-past" class="section level2">
+<h2>Insights from the past</h2>
+<p>There are at least two core problems:<br />
+1. Systematic data are lacking as are systematic evaluations.<br />
+–</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Counterfactual problems are paramount.
+<ul>
+<li><em>One leader at a time.</em></li>
+</ul></li>
+</ol>
+</div>
+<div id="section" class="section level2">
+<h2><img src="https://i.imgur.com/vnUtT52.png" /></h2>
+<p>class: inverse</p>
+</div>
+<div id="what-do-leaders-want" class="section level2">
+<h2># What do Leaders Want?</h2>
+</div>
+<div id="to-lead-or-equivalently-keep-their-jobs" class="section level2">
+<h2>### To lead or equivalently: keep their jobs</h2>
+<ol style="list-style-type: decimal">
+<li>The tenure of leaders</li>
+<li>How do they enter?<br />
+</li>
+<li>How do they exit?<br />
+</li>
+<li>Age and Sex</li>
+</ol>
+</div>
+<div id="the-key-quantity" class="section level2">
+<h2>The Key Quantity</h2>
+<p>Probability of survival given time in office can be written as:</p>
+<p><span class="math display">\[ Pr(Survive|t) = \frac{\textrm{Number Surviving at t+1}}{\textrm{Risk set at t}}  \]</span></p>
+<p>Basically, the number of failures only considering those that have survived number of years.</p>
+</div>
+<div id="creating-tenure-and-a-view" class="section level2">
+<h2>Creating Tenure and a View</h2>
+<pre class="r"><code>Archigos %&lt;&gt;% mutate(tenure = as.duration(eindate %--% eoutdate)) %&gt;% # Create duration for each spell  
+  mutate(tenureY = tenure / dyears(1))    # Measure duration in years.
+Archigos %&gt;% head() %&gt;% kable(., format=&quot;html&quot;) %&gt;% kable_styling() %&gt;% scroll_box(width = &quot;800px&quot;, height = &quot;400px&quot;)</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:800px; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+obsid
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+leadid
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+ccode
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+idacr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+leader
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+startdate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+eindate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+enddate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+eoutdate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+entry
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+exit
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+exitcode
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+prevtimesinoffice
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+posttenurefate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+gender
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+yrborn
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+yrdied
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+borndate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ebirthdate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+deathdate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+edeathdate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+dbpediauri
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+numentry
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+numexit
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+numexitcode
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+numposttenurefate
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+fties
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+ftcur
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+tenure
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+tenureY
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+USA-1869
+</td>
+<td style="text-align:left;">
+81dcc176-1e42-11e4-b4cd-db5882bf8def
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Grant
+</td>
+<td style="text-align:left;">
+1869-03-04
+</td>
+<td style="text-align:left;">
+1869-03-04
+</td>
+<td style="text-align:left;">
+1877-03-04
+</td>
+<td style="text-align:left;">
+1877-03-04
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+OK
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:right;">
+1822
+</td>
+<td style="text-align:right;">
+1885
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1885-07-23
+</td>
+<td style="text-align:left;">
+1885-07-23
+</td>
+<td style="text-align:left;">
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Ulysses-5FS.-5FGrant&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=x7yRI4mbwG8b0j8c_AwqAahtkPcCfIY2uH8tdRaReBw&amp;e=" class="uri">https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Ulysses-5FS.-5FGrant&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=x7yRI4mbwG8b0j8c_AwqAahtkPcCfIY2uH8tdRaReBw&amp;e=</a>
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+252460800s (~8 years)
+</td>
+<td style="text-align:right;">
+8.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+USA-1877
+</td>
+<td style="text-align:left;">
+81dcc177-1e42-11e4-b4cd-db5882bf8def
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Hayes
+</td>
+<td style="text-align:left;">
+1877-03-04
+</td>
+<td style="text-align:left;">
+1877-03-04
+</td>
+<td style="text-align:left;">
+1881-03-04
+</td>
+<td style="text-align:left;">
+1881-03-04
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+OK
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:right;">
+1822
+</td>
+<td style="text-align:right;">
+1893
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1893-01-17
+</td>
+<td style="text-align:left;">
+1893-01-17
+</td>
+<td style="text-align:left;">
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Rutherford-5FB.-5FHayes&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=8oshcxB52W-Pg-2a6AvRVJEYMU-S-RG55-369eJ-PyY&amp;e=" class="uri">https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Rutherford-5FB.-5FHayes&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=8oshcxB52W-Pg-2a6AvRVJEYMU-S-RG55-369eJ-PyY&amp;e=</a>
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+126230400s (~4 years)
+</td>
+<td style="text-align:right;">
+4.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+USA-1881-1
+</td>
+<td style="text-align:left;">
+81dcf24a-1e42-11e4-b4cd-db5882bf8def
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Garfield
+</td>
+<td style="text-align:left;">
+1881-03-04
+</td>
+<td style="text-align:left;">
+1881-03-04
+</td>
+<td style="text-align:left;">
+1881-09-19
+</td>
+<td style="text-align:left;">
+1881-09-19
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Irregular
+</td>
+<td style="text-align:left;">
+Assassination by Unsupported Individual
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Death
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:right;">
+1831
+</td>
+<td style="text-align:right;">
+1881
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1881-09-19
+</td>
+<td style="text-align:left;">
+1881-09-19
+</td>
+<td style="text-align:left;">
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_James-5FA.-5FGarfield&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=qTPSlRS-mPD_m8ZM3luuJ4W47DtmOPoXSnSZn-lYsqM&amp;e=" class="uri">https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_James-5FA.-5FGarfield&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=qTPSlRS-mPD_m8ZM3luuJ4W47DtmOPoXSnSZn-lYsqM&amp;e=</a>
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+17193600s (~28.43 weeks)
+</td>
+<td style="text-align:right;">
+0.5448323
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+USA-1881-2
+</td>
+<td style="text-align:left;">
+81dcf24b-1e42-11e4-b4cd-db5882bf8def
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Arthur
+</td>
+<td style="text-align:left;">
+1881-09-19
+</td>
+<td style="text-align:left;">
+1881-09-19
+</td>
+<td style="text-align:left;">
+1885-03-04
+</td>
+<td style="text-align:left;">
+1885-03-04
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+OK
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:right;">
+1829
+</td>
+<td style="text-align:right;">
+1886
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1886-11-18
+</td>
+<td style="text-align:left;">
+1886-11-18
+</td>
+<td style="text-align:left;">
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Chester-5FA.-5FArthur&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=XiglK4IJ3ZCC1kR4Hmb8eVB-V7A0tQprCtTKzOl42YM&amp;e=" class="uri">https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Chester-5FA.-5FArthur&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=XiglK4IJ3ZCC1kR4Hmb8eVB-V7A0tQprCtTKzOl42YM&amp;e=</a>
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+109036800s (~3.46 years)
+</td>
+<td style="text-align:right;">
+3.4551677
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+USA-1885
+</td>
+<td style="text-align:left;">
+34fb1558-3bbd-11e5-afeb-eb6f07f9fec7
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Cleveland
+</td>
+<td style="text-align:left;">
+1885-03-04
+</td>
+<td style="text-align:left;">
+1885-03-04
+</td>
+<td style="text-align:left;">
+1889-03-04
+</td>
+<td style="text-align:left;">
+1889-03-04
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+OK
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:right;">
+1837
+</td>
+<td style="text-align:right;">
+1908
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1908-06-24
+</td>
+<td style="text-align:left;">
+1908-06-24
+</td>
+<td style="text-align:left;">
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Grover-5FCleveland&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=BH6RahZV58hS1fIGz1muHnQkbAirSz4Yy2wc6chejsQ&amp;e=" class="uri">https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Grover-5FCleveland&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=BH6RahZV58hS1fIGz1muHnQkbAirSz4Yy2wc6chejsQ&amp;e=</a>
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+126230400s (~4 years)
+</td>
+<td style="text-align:right;">
+4.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+USA-1889
+</td>
+<td style="text-align:left;">
+81dcf24d-1e42-11e4-b4cd-db5882bf8def
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+USA
+</td>
+<td style="text-align:left;">
+Harrison
+</td>
+<td style="text-align:left;">
+1889-03-04
+</td>
+<td style="text-align:left;">
+1889-03-04
+</td>
+<td style="text-align:left;">
+1893-03-04
+</td>
+<td style="text-align:left;">
+1893-03-04
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:left;">
+Regular
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+OK
+</td>
+<td style="text-align:left;">
+M
+</td>
+<td style="text-align:right;">
+1833
+</td>
+<td style="text-align:right;">
+1901
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1901-03-13
+</td>
+<td style="text-align:left;">
+1901-03-13
+</td>
+<td style="text-align:left;">
+<a href="https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Benjamin-5FHarrison&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=MA-TUrYNLJuZ9PTyDnsCkyBUtUyUkXWBHX7_p3f3pnA&amp;e=" class="uri">https://urldefense.proofpoint.com/v2/url?u=http-3A__dbpedia.org_resource_Benjamin-5FHarrison&amp;d=BQID-g&amp;c=kbmfwr1Yojg42sGEpaQh5ofMHBeTl9EI2eaqQZhHbOU&amp;r=ZliGVSRwfirWoETOrKCh2RSnoygzVPWEk95Me9L-Kwo&amp;m=EaKyFx9mpkhPdFxsxzvW_fiM3jbYwM3xYLjVbSFoDAg&amp;s=MA-TUrYNLJuZ9PTyDnsCkyBUtUyUkXWBHX7_p3f3pnA&amp;e=</a>
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+126230400s (~4 years)
+</td>
+<td style="text-align:right;">
+4.0000000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>class: right
+background-image: url(“img/TenureBack.svg”)
+background-size: contain</p>
+</div>
+<div id="leadership-tenure" class="section level1">
+<h1>Leadership tenure</h1>
+<div id="how-long-do-leaders-stay-in-office" class="section level2">
+<h2>How long do leaders stay in office?</h2>
+</div>
+</div>
+<div id="most-dont-do-so-well" class="section level1">
+<h1>Most Don’t Do So Well</h1>
+<pre class="r"><code>ArchB %&gt;% filter(tenureY &lt; 5) %&gt;% ggplot(., aes(x=tenureY)) + geom_histogram(fill = &quot;magenta&quot;) + theme_minimal(base_size = 24) + labs(title=&quot;Tenure under Five Years&quot;, x = &quot;Tenure in Years&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="by-continent" class="section level1">
+<h1>By Continent</h1>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="by-gender" class="section level1">
+<h1>By Gender</h1>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<p>class: inverse</p>
+<div id="classifying-regimes" class="section level2">
+<h2>Classifying Regimes</h2>
+<div class="figure">
+<img src="img/Polity.png" alt="" />
+<p class="caption">Polity</p>
+</div>
+<p>class: inverse</p>
+</div>
+<div id="the-distribution-of-regimes" class="section level2">
+<h2>The Distribution of Regimes</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<hr />
+<div id="survival-by-government-type" class="section level3">
+<h3>Survival by Government Type</h3>
+<pre class="r"><code>ggplot(PolArch, aes(time = tenureY, status = Censored, color = factor(GovType))) + geom_km() + labs(title=&quot;Survival by Government Type&quot;, color=&quot;Type&quot;) + theme_minimal(base_size = 24)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+<hr />
+</div>
+</div>
+<div id="shown-by-tenure" class="section level2">
+<h2>Shown by Tenure</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
+<hr />
+</div>
+<div id="th-vs.-20th-century" class="section level2">
+<h2>19th vs. 20th Century?</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="not-much-difference-by-century-given-type" class="section level2">
+<h2>Not Much Difference by Century Given Type</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="not-much-difference-by-century-given-type-1" class="section level2">
+<h2>Not Much Difference by Century Given Type</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<p>count: false</p>
+<p>.panel1-Entry-auto[</p>
+<pre class="r"><code>Archigos %&gt;%
+  tabyl(entry)   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Entry-auto[</p>
+<pre><code>              entry    n      percent
+ Foreign Imposition   40 0.0117336462
+          Irregular  571 0.1674977999
+            Regular 2796 0.8201818715
+            Unknown    2 0.0005866823</code></pre>
+<p>]</p>
+<p>count: false</p>
+<p>.panel1-Entry-auto[</p>
+<pre class="r"><code>Archigos %&gt;%
+  tabyl(entry) %&gt;%
+  ggplot(., aes(x=fct_reorder(entry, n), y=n, fill=entry)) +
+  geom_col()   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Entry-auto[
+<img src="index_files/figure-html/Entry_auto_04_output-1.png" width="768" />]</p>
+<p>count: false</p>
+<p>.panel1-Entry-auto[</p>
+<pre class="r"><code>Archigos %&gt;%
+  tabyl(entry) %&gt;%
+  ggplot(., aes(x=fct_reorder(entry, n), y=n, fill=entry)) +
+  geom_col() +
+  theme_minimal(base_size = 24) +
+  coord_flip()   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Entry-auto[
+<img src="index_files/figure-html/Entry_auto_06_output-1.png" width="768" />]</p>
+<p>count: false</p>
+<p>.panel1-Entry-auto[</p>
+<pre class="r"><code>Archigos %&gt;%
+  tabyl(entry) %&gt;%
+  ggplot(., aes(x=fct_reorder(entry, n), y=n, fill=entry)) +
+  geom_col() +
+  theme_minimal(base_size = 24) +
+  coord_flip() +
+  scale_fill_viridis_d() +
+  guides(fill=FALSE)   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Entry-auto[
+<img src="index_files/figure-html/Entry_auto_08_output-1.png" width="768" />]</p>
+</div>
+</div>
+<div id="most-enter-regularly" class="section level1">
+<h1>Most Enter Regularly</h1>
+<p><img src="index_files/figure-html/Enter2-1.png" width="768" /></p>
+<div id="split-entry-by-century" class="section level2">
+<h2>Split Entry by Century</h2>
+<p>count: false</p>
+<p>.panel1-TableEnt-user[</p>
+<pre class="r"><code>PolArch %&gt;%  #&lt;&lt;
+  mutate(Twentieth.Century = (BYear &gt; 1899)) %&gt;%  #&lt;&lt;
+  tabyl(entry, Twentieth.Century)   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-TableEnt-user[</p>
+<pre><code>              entry FALSE TRUE
+ Foreign Imposition     6   34
+          Irregular    70  501
+            Regular   310 2486
+            Unknown     0    2</code></pre>
+<p>]</p>
+</div>
+</div>
+<div id="survival-given-entry-and-century" class="section level1">
+<h1>Survival Given Entry and Century</h1>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+<p>class: middle, inverse, center</p>
+</div>
+<div id="entry-and-exit" class="section level1">
+<h1>Entry and Exit</h1>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
+<div id="conditional-probability-of-exit-given-entry" class="section level2">
+<h2>Conditional Probability of Exit Given Entry?</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+</div>
+</div>
+<div id="autocrats-last-longest" class="section level1">
+<h1>Autocrats Last Longest</h1>
+<p>But…</p>
+<p><img src="index_files/figure-html/FinalTab-1.png" width="768" /></p>
+<div id="opportunities-abound-for-females" class="section level3">
+<h3>Opportunities Abound for Females</h3>
+<pre class="r"><code>Archigos %&gt;% ggplot(aes(x=eindate, color=gender)) + geom_density() + theme_ipsum_rc()</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="768" /></p>
+<hr />
+<p>class: bottom
+background-image: url(“img/PicAnimNew.gif”)
+background-position: 65% 8%</p>
+</div>
+</div>
+<div id="thanks" class="section level1">
+<h1>Thanks!</h1>
+<p>Slides created via the R package <a href="https://github.com/yihui/xaringan"><strong>xaringan</strong></a>.</p>
+<p><a href="https://s8.sytes.net/shiny/ArchigosDT">The shiny</a></p>
+<p>Theme borrowed from <code>@apreshill</code> and her <code>r-ladies</code> theme.</p>
+</div>

@@ -1,0 +1,755 @@
+---
+title: "Data Analysis, Modelling, and Decision-Making"
+subtitle: "Statistics and Decision Science"  
+author: 
+  - "Robert W. Walker"
+date: '2020-10-19'
+output:
+  xaringan::moon_reader:
+    includes:
+      after_body: insert-logo.html
+    lib_dir: libs
+    css: ["xaringan-themer.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+<script src="index_files/header-attrs/header-attrs.js"></script>
+<script src="index_files/htmlwidgets/htmlwidgets.js"></script>
+<script src="index_files/jquery/jquery.min.js"></script>
+<link href="index_files/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="index_files/datatables-binding/datatables.js"></script>
+<link href="index_files/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="index_files/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="index_files/dt-core/js/jquery.dataTables.min.js"></script>
+<script src="index_files/jszip/jszip.min.js"></script>
+<link href="index_files/dt-ext-buttons/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="index_files/dt-ext-buttons/js/dataTables.buttons.min.js"></script>
+<script src="index_files/dt-ext-buttons/js/buttons.flash.min.js"></script>
+<script src="index_files/dt-ext-buttons/js/buttons.html5.min.js"></script>
+<script src="index_files/dt-ext-buttons/js/buttons.colVis.min.js"></script>
+<script src="index_files/dt-ext-buttons/js/buttons.print.min.js"></script>
+<link href="index_files/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="index_files/crosstalk/js/crosstalk.min.js"></script>
+
+
+<p>class: center</p>
+<div id="an-overview" class="section level1">
+<h1>An Overview</h1>
+<iframe src="https://prezi.com/embed/as3vjjlfsjbt/" id="iframe_container" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen allow="autoplay; fullscreen" height="315" width="560">
+</iframe>
+<hr />
+</div>
+<div id="first-day-details" class="section level1">
+<h1>First Day Details</h1>
+<div id="some-quick-r-and-excel-tools" class="section level2">
+<h2>Some Quick R and Excel Tools</h2>
+</div>
+</div>
+<div id="some-example-data" class="section level1">
+<h1>Some Example Data</h1>
+<p>The data are Bond.Funds. We have an ID, Type, Assets, Fees [Yes or No], Expense Ratio, Returns in 2009, 3 year, 5 year, and a Risk classification. A <a href="https://github.com/robertwwalker/DADMStuff/raw/master/BondFunds.csv">link to the data</a>.</p>
+<pre class="r"><code>load(url(&quot;https://github.com/robertwwalker/DADMStuff/raw/master/R-Workspace-Lecture-1.RData&quot;))
+Bonds %&gt;% datatable(class = &quot;compact&quot;, rownames = FALSE, extensions = &quot;Buttons&quot;, 
+    options = list(dom = &quot;tBp&quot;, scrollY = TRUE, buttons = c(&quot;csv&quot;, &quot;excel&quot;), pageLength = 8)) %&gt;% 
+    DT::formatRound(1:4, digits = 1)
+# read from Excel: Bonds &lt;-
+# readxl::read_xls(&#39;/home/rob/Downloads/BondFundsSupport.xls&#39;, sheet=&#39;JustData&#39;)</code></pre>
+<hr />
+<div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","extensions":["Buttons"],"data":[["FN-1","FN-2","FN-3","FN-4","FN-5","FN-6","FN-7","FN-8","FN-9","FN-10","FN-11","FN-12","FN-13","FN-14","FN-15","FN-16","FN-17","FN-18","FN-19","FN-20","FN-21","FN-22","FN-23","FN-24","FN-25","FN-26","FN-27","FN-28","FN-29","FN-30","FN-31","FN-32","FN-33","FN-34","FN-35","FN-36","FN-37","FN-38","FN-39","FN-40","FN-41","FN-42","FN-43","FN-44","FN-45","FN-46","FN-47","FN-48","FN-49","FN-50","FN-51","FN-52","FN-53","FN-54","FN-55","FN-56","FN-57","FN-58","FN-59","FN-60","FN-61","FN-62","FN-63","FN-64","FN-65","FN-66","FN-67","FN-68","FN-69","FN-70","FN-71","FN-72","FN-73","FN-74","FN-75","FN-76","FN-77","FN-78","FN-79","FN-80","FN-81","FN-82","FN-83","FN-84","FN-85","FN-86","FN-87","FN-88","FN-89","FN-90","FN-91","FN-92","FN-93","FN-94","FN-95","FN-96","FN-97","FN-98","FN-99","FN-100","FN-101","FN-102","FN-103","FN-104","FN-105","FN-106","FN-107","FN-108","FN-109","FN-110","FN-111","FN-112","FN-113","FN-114","FN-115","FN-116","FN-117","FN-118","FN-119","FN-120","FN-121","FN-122","FN-123","FN-124","FN-125","FN-126","FN-127","FN-128","FN-129","FN-130","FN-131","FN-132","FN-133","FN-134","FN-135","FN-136","FN-137","FN-138","FN-139","FN-140","FN-141","FN-142","FN-143","FN-144","FN-145","FN-146","FN-147","FN-148","FN-149","FN-150","FN-151","FN-152","FN-153","FN-154","FN-155","FN-156","FN-157","FN-158","FN-159","FN-160","FN-161","FN-162","FN-163","FN-164","FN-165","FN-166","FN-167","FN-168","FN-169","FN-170","FN-171","FN-172","FN-173","FN-174","FN-175","FN-176","FN-177","FN-178","FN-179","FN-180","FN-181","FN-182","FN-183","FN-184"],["Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Intermediate Government","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate","Short Term Corporate"],[7268.1,475.1,193,18603.5,142.6,1401.6,985.6,2188.8,390.6,544.1,1407.4,155.5,397.5,906.1,379.1,62.7,1539.1,167.3,448,238.1,557.8,192.7,261.8,135.8,1807.3,4615.4,86.2,291.1,6332.5,110.7,619.7,628.7,274.3,891.8,94.7,676.3,1182.1,135.9,588.8,40,1080.4,309.1,4472.2,498.7,278.2,1525.5,556.6,588.6,332.5,84.9,17.3,104.1,530.7,333.6,1133.3,322.5,123.8,425.6,184.7,122.7,107.2,135.6,82.2,305.7,551.3,24.2,661.2,154.6,106.9,1011.1,634.8,168.7,792.1,583.5,56.1,285.5,640.3,84.7,81.3,611.7,595.1,131.3,88,686.6,3531.8,358,33,139.1,123.9,1922,203.4,66.1,1346,4772.9,77.5,76.2,146.3,49.2,96.1,226.8,122.3,725.9,1248.4,36.5,127.4,605.2,1879.2,964.7,325.3,69.8,177.8,156.6,244.9,475.5,46.1,181.3,63.8,135.4,388,18.6,298.1,461.3,159.9,3662.7,42.6,111.4,114.5,5282.9,17.4,518,262.5,93.9,1130,1101.9,49.9,640.3,477.4,569.4,36.8,145.4,148.9,195.8,2361.1,12.4,26.3,681,486.1,10744.6,108.9,69,128.3,374.4,280.6,456.2,16297.1,517,80.5,119.3,88.3,5701.6,478.4,369.3,297.4,230.6,115.7,6981.5,190.1,278.4,246.1,143.8,1469.6,80,95.5,170.5,95.4,237.1,983,51.9,249.7,33.8,249.8,52.9,39.7,182.3],["No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","Yes","No","Yes","No","No","Yes","Yes","No","Yes","No","No","Yes","Yes","Yes","Yes","No","Yes","No","No","Yes","Yes","Yes","No","No","Yes","Yes","Yes","No","No","Yes","Yes","No","No","Yes","No","Yes","Yes","No","No","Yes","No","Yes","No","No","Yes","Yes","Yes","Yes","Yes","Yes","Yes","No","No","No","No","Yes","Yes","No","No","No","No","Yes","No","Yes","No","No","No","Yes","Yes","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","No","Yes","No","No","Yes","No","No","Yes","No","No","Yes","No","No","No","No","No","Yes","No","No","No","No","No","No","No","No","No","Yes","No","No","No","No","No","No","Yes","No","No","Yes","No","No","Yes","No","No","No","Yes","No","No","Yes","No","No","No","No","No","No","Yes","No","No","Yes","No","Yes","No","No","Yes","No","No","Yes","No","No","No","Yes","No","No","No","No","No","Yes","No","No","No"],[0.45,0.5,0.71,0.13,0.6,0.54,0.49,0.55,0.67,0.63,0.45,0.91,0.6,0.51,0.57,0.74,0.66,0.6,0.77,1.13,0.74,0.7,1.08,0.65,0.8,0.45,0.61,1.1,0.73,1.08,0.96,0.55,0.8,0.88,0.83,0.93,0.92,0.47,0.96,1.94,0.95,0.98,0.64,0.95,0.2,0.13,0.94,0.96,1,0.71,1.58,0.95,0.92,0.37,0.46,1.13,0.75,0.97,1.03,0.26,0.9,1.15,0.57,0.99,0.52,0.52,0.97,0.9,0.79,0.87,0.9,0.99,1,0.5,0.65,0.36,0.27,1,1.16,0.51,0.55,0.65,0.82,0.94,0.12,1.06,1,0.51,0.32,1.08,1,0.71,0.65,0.56,0.51,0.68,0.55,0.6,0.73,0.45,0.53,0.68,0.72,0.76,0.45,0.3,0.48,0.85,0.53,0.9,0.94,0.63,0.81,0.91,0.92,0.36,0.62,0.7,0.56,0.89,0.51,0.46,0.8,0.52,0.74,0.97,0.65,0.22,0.75,0.72,0.85,0.74,0.86,0.64,0.6,0.54,0.6,0.52,0.38,0.9,1.1,0.52,0.8,0.7,0.49,0.75,0.5,0.46,0.63,0.98,0.55,0.73,0.99,0.37,0.14,0.65,0.7,0.82,0.92,0.69,0.64,0.86,1.05,0.95,0.7,0.45,0.5,0.85,0.75,0.8,1.08,0.7,0.66,0.46,1.02,0.5,0.6,0.7,0.55,0.53,0.43,0.87,0.51,0.53],[6.9,9.8,6.3,5.4,5.9,5.7,3,7.4,5.3,5.7,0.9,12.4,6,8.1,5.7,4.5,6.4,5.8,10.1,4.4,9,3.2,3.5,-1.1,7.8,1.3,-0.2,5.1,4.8,1.9,5,2.1,12.7,4.2,3.5,22.3,28.6,13,5.2,17.1,3.5,0,2.2,0.9,-3.8,-0.7,7.9,6.2,3.7,11.2,2.1,-3.6,4.6,12,3.4,4.7,6.4,9.1,1.7,-3.6,0.1,3.7,-3.3,3,-1.4,0.7,0,2.9,-4.8,1.4,7.3,-2.9,1.2,6,0.7,7.1,0.2,-0.6,7,6.5,5.5,-3.8,2,7.2,-1.6,0.5,0.2,5.5,5,12.1,8.3,6.8,8.6,5,2.2,2.5,12.2,10,7.3,2.9,7.3,15.5,14,5.5,3.6,8.1,9.6,12.9,10.7,6,8.2,12,16.4,6,5.4,4.9,8.6,6.8,6.7,4.1,11.2,8.4,5.9,9,5.4,9.1,9.5,4.3,2.8,10.8,9.5,9.4,13.2,13,1.6,7,12.9,12,3.6,10.1,7.7,7.2,17.4,3.4,4,11.3,10.3,13.4,11.4,5.2,8.8,13.2,16.6,13.6,14.2,10.6,13.4,6,4.5,6.7,6.8,13.5,12.8,13.9,11.5,7.3,11.6,15.5,11.9,24.8,29.7,9.9,19.2,15.6,1.5,14.5,15.2,13.4,2.4,16.4,6.7,5.2,-8.8,32],[6.9,7.5,7,6.6,6.7,6.4,6.8,6.4,6.1,6.2,6.2,6.4,6.3,6.1,6.6,7.8,6.2,6.2,6.5,5.5,6,6,5.1,6,6.1,6.7,5.6,5.8,6,5.4,5.9,6.3,6.1,6.6,6.4,9.4,9.4,5.1,6.7,6.6,6,5.8,5.5,4.9,6,7.1,5.5,5.1,4.7,3.9,4.9,4.7,5.5,4.9,2.3,5.6,3.3,4.7,5.6,6.1,5.3,5.9,5.1,6.2,7.3,-0.1,3.2,2.4,5.6,1.6,3.7,6,2.3,7.3,5.2,5.5,6.5,2.5,1,6.8,6.3,4.4,5.8,3.7,7.2,4.9,6.1,5.1,4.4,5.5,5.2,4.9,6.1,4.9,3.7,5.2,5.8,5,4.8,3.6,5.9,5.9,5.5,5,3.3,4.1,4.9,7.1,4.5,4.6,5.4,6.3,5.5,6.4,4.2,4.5,5.5,4.2,4.6,3.4,5,4.5,4.8,5.2,4.6,4.5,4.9,5.6,3.9,6.4,4.4,5.5,6.5,3.5,1.3,2.3,4.6,4.9,1.7,3.1,4.3,4.2,7.1,5.5,6,3.5,5.7,6.5,4.1,4.7,5.9,4.6,8,3.7,4.9,4.7,5.1,5,1,3.4,2.2,2.7,2.6,3.5,1.8,1.7,5.5,4.4,0.8,8.9,4.8,2.9,0,0.7,-0.2,0.7,0.2,0.1,0.4,0.7,-4.5,-3,-13.8,-2.7],[5.5,6.1,5.6,5.5,5.4,6.2,5.3,5.2,5,5.1,4.7,5.1,5.1,5.1,5.2,5.6,5,5.1,5.3,4.3,4.9,4.9,4,4.6,4.9,5.2,4.4,4.6,4.9,4.2,4.9,5.1,5,5.1,5.1,6.4,6.8,4.5,5.3,5.1,4.7,4.4,4.4,4.1,4.7,5.3,4.3,4.4,4,3.7,3.7,3.7,4.5,4.5,2.5,4.4,3.2,4.1,4.4,4.7,4,4.4,4.2,4.9,5.2,1.2,3,2.6,4.6,2.3,3.4,4.1,2.6,5.7,4.4,4.8,5.2,2.5,1.7,5.5,5.2,3.8,4.5,3.5,5.4,4,4.8,4.3,4.1,5,4.4,4,4.8,4.2,3.5,4.2,4.8,4.6,4.1,3.6,4.6,4.7,4.7,4,3.3,3.7,4.2,5.3,4.1,3.8,4.4,4.9,4.6,4.7,3.6,3.8,4.3,3.7,3.8,3.1,4.3,4,4,4.3,4,3.7,4.1,4.4,3.4,4.9,3.9,4.3,4.9,3.8,2.3,2.7,3.9,4,2.5,3,3.4,3.6,5.1,4.2,4.6,3.3,4.4,4.9,3.6,3.4,4.5,3.8,4.6,3.5,4.4,3.8,4.2,4,1.7,3.1,2.4,2.6,2.7,3.2,2.4,2.4,4.4,3.8,2,6.4,4.3,3,1.3,2,1.8,1.7,1.9,1.2,1.5,1.8,-1.5,-0.7,-7.3,0.2],["Below average","Below average","Average","Average","Average","Average","Average","Below average","Below average","Below average","Average","Below average","Below average","Below average","Below average","Above average","Below average","Below average","Below average","Below average","Below average","Average","Below average","Average","Average","Above average","Average","Below average","Below average","Average","Average","Above average","Average","Average","Average","Above average","Above average","Below average","Average","Above average","Average","Above average","Average","Above average","Above average","Above average","Above average","Below average","Average","Below average","Average","Above average","Average","Above average","Below average","Above average","Average","Below average","Above average","Above average","Average","Average","Above average","Above average","Above average","Above average","Above average","Average","Above average","Average","Above average","Above average","Above average","Average","Average","Below average","Above average","Average","Above average","Average","Below average","Above average","Average","Below average","Above average","Average","Below average","Below average","Below average","Average","Below average","Below average","Below average","Below average","Below average","Below average","Average","Average","Below average","Below average","Average","Average","Average","Below average","Below average","Average","Average","Average","Average","Average","Below average","Average","Average","Average","Average","Average","Average","Below average","Below average","Below average","Average","Average","Below average","Average","Below average","Below average","Below average","Average","Below average","Average","Below average","Above average","Above average","Above average","Below average","Below average","Average","Average","Below average","Below average","Average","Average","Above average","Above average","Above average","Average","Above average","Above average","Average","Below average","Above average","Above average","Above average","Average","Above average","Average","Above average","Average","Average","Average","Below average","Above average","Above average","Average","Average","Below average","Above average","Above average","Average","Above average","Above average","Above average","Above average","Above average","Below average","Above average","Above average","Above average","Average","Above average","Above average","Above average","Above average","Above average"]],"container":"<table class=\"compact\">\n  <thead>\n    <tr>\n      <th>Fund Number<\/th>\n      <th>Type<\/th>\n      <th>Assets<\/th>\n      <th>Fees<\/th>\n      <th>Expense Ratio<\/th>\n      <th>Return 2009<\/th>\n      <th>3-Year Return<\/th>\n      <th>5-Year Return<\/th>\n      <th>Risk<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"tBp","scrollY":true,"buttons":["csv","excel"],"pageLength":8,"columnDefs":[{"targets":0,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\");\n  }"},{"targets":1,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\");\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\");\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\");\n  }"},{"className":"dt-right","targets":[2,4,5,6,7]}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
+<p>class: inverse</p>
+</div>
+<div id="some-essential-excel" class="section level1">
+<h1>Some Essential Excel</h1>
+<ul>
+<li>Formulae<br />
+</li>
+<li>Absolute and relative references<br />
+</li>
+<li>Pivot tables</li>
+</ul>
+<p>It has some nice features.</p>
+<p>It fails the simple test of manipulability of the underlying data.</p>
+<hr />
+<div id="formulae" class="section level2">
+<h2>Formulae</h2>
+<p>Pre-programmed functions that take input ranges of cells and produce particular outputs.</p>
+<p>A <a href="https://github.com/robertwwalker/DADMStuff/raw/master/BondFunds.csv">link to some data</a>.</p>
+<p>e.g. set cell <code>J5</code> to be:</p>
+<pre><code>=AVERAGE(C2:C21)</code></pre>
+<p>This averages the range between C2 and C21 [Assets]. When we copy this left or right, up or down, the numbers and/or letters adjust.</p>
+<p><strong>Let’s try to make column L into <code>=C2 - J5</code> all the way down to C21.</strong></p>
+<p>NB: The average is technically known as the <em>arithmetic mean</em>; it is sometimes short-formed to the mean, though there are geometric and harmonic variants, also.</p>
+<hr />
+</div>
+<div id="cell-referencing" class="section level2">
+<h2>Cell Referencing</h2>
+<p>We may not want that. Suppose that I want to create a column showing the difference of calories and average calories. The <code>$</code> holds an index constant [F4]. We have two. In our case, we can hold both the rows and the column constant for the average. Because we are only copying down, the <code>$5</code> would have sufficed.</p>
+<pre><code>=C2 - $J$5
+=C2 - J$5</code></pre>
+<p>Then copy the formula down to L21. Notice the C changes [no $] but the J doesn’t. <strong>The $ enables absolute cell referencing.</strong></p>
+<hr />
+<p>As expected. Average assets over the first 20 is 1894.7; the first is 5373.4 above the average for this set.</p>
+<div class="figure">
+<img src="https://github.com/robertwwalker/DADMStuff/raw/master/Formulae.png" alt="" />
+<p class="caption">Imgur</p>
+</div>
+<hr />
+</div>
+<div id="formulae-and-recursion" class="section level2">
+<h2>Formulae and Recursion</h2>
+<p>This can become quite involved; spreadsheets are programming tools. <strong>Their underlying problem is that they do not enforce rules or discipline along the way.</strong></p>
+<p>The key to our formulae are one or more inputs, a series of transformation and operations, and one or more outputs defined in a precise fashion. As an aside, the father of recursion as a core principle in computer science is teaching at Willamette this term – Eric S. Roberts. Functions link inputs and outputs.</p>
+<p><strong>They are models.</strong></p>
+<hr />
+</div>
+</div>
+<div id="pivot-tables" class="section level1">
+<h1>Pivot Tables</h1>
+<p>Are really cool; they are a very simple and quick way to slice and data and to gain useful comparative and/or summary insight.</p>
+<p>They have the added virtue of being drag and drop.</p>
+<p>All of the action comes in the calculations shown in the pivot table. Unfortunately, it is extraordinarily limited. What if I want the first and third quartiles?</p>
+<hr />
+</div>
+<div id="r-escue" class="section level1">
+<h1>R-escue</h1>
+<p>This will become easy with the group_by command in R’s tidyverse.</p>
+<pre class="r"><code>Bonds %&gt;% group_by(Type) %&gt;% summarise(Avg.Assets = mean(Assets, na.rm=TRUE),
+                                       Avg.Returns = mean(`Return 2009`, na.rm=TRUE),
+                                       `Assets 25th` = quantile(Assets, probs = c(0.25), na.rm = TRUE),
+                                       `Assets 75th` = quantile(Assets, probs = c(0.75), na.rm = TRUE)) %&gt;% kableExtra::kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:right;">
+Avg.Assets
+</th>
+<th style="text-align:right;">
+Avg.Returns
+</th>
+<th style="text-align:right;">
+Assets 25th
+</th>
+<th style="text-align:right;">
+Assets 75th
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intermediate Government
+</td>
+<td style="text-align:right;">
+953.3897
+</td>
+<td style="text-align:right;">
+4.452874
+</td>
+<td style="text-align:right;">
+135.85
+</td>
+<td style="text-align:right;">
+668.75
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Short Term Corporate
+</td>
+<td style="text-align:right;">
+872.3134
+</td>
+<td style="text-align:right;">
+9.595876
+</td>
+<td style="text-align:right;">
+95.40
+</td>
+<td style="text-align:right;">
+486.10
+</td>
+</tr>
+</tbody>
+</table>
+<div id="skim" class="section level2">
+<h2><code>skim()</code></h2>
+<p>.scroll-output[</p>
+<table style="width: auto;" class="table table-condensed">
+<caption>
+<span id="tab:unnamed-chunk-5">Table 1: </span>Data summary
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Name
+</td>
+<td style="text-align:left;">
+Piped data
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of rows
+</td>
+<td style="text-align:left;">
+184
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of columns
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_______________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Column type frequency:
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+________________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Group variables
+</td>
+<td style="text-align:left;">
+Type, Risk
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+Risk
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Assets
+</td>
+<td style="text-align:left;">
+Intermediate Government
+</td>
+<td style="text-align:left;">
+Above average
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+660.44
+</td>
+<td style="text-align:right;">
+1018.78
+</td>
+<td style="text-align:right;">
+24.2
+</td>
+<td style="text-align:right;">
+122.70
+</td>
+<td style="text-align:right;">
+322.50
+</td>
+<td style="text-align:right;">
+640.30
+</td>
+<td style="text-align:right;">
+4615.4
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Assets
+</td>
+<td style="text-align:left;">
+Intermediate Government
+</td>
+<td style="text-align:left;">
+Average
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1165.10
+</td>
+<td style="text-align:right;">
+3292.66
+</td>
+<td style="text-align:right;">
+17.3
+</td>
+<td style="text-align:right;">
+120.52
+</td>
+<td style="text-align:right;">
+303.40
+</td>
+<td style="text-align:right;">
+915.25
+</td>
+<td style="text-align:right;">
+18603.5
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Assets
+</td>
+<td style="text-align:left;">
+Intermediate Government
+</td>
+<td style="text-align:left;">
+Below average
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1019.58
+</td>
+<td style="text-align:right;">
+1770.58
+</td>
+<td style="text-align:right;">
+33.0
+</td>
+<td style="text-align:right;">
+267.72
+</td>
+<td style="text-align:right;">
+436.80
+</td>
+<td style="text-align:right;">
+663.72
+</td>
+<td style="text-align:right;">
+7268.1
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Assets
+</td>
+<td style="text-align:left;">
+Short Term Corporate
+</td>
+<td style="text-align:left;">
+Above average
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1268.08
+</td>
+<td style="text-align:right;">
+3449.36
+</td>
+<td style="text-align:right;">
+12.4
+</td>
+<td style="text-align:right;">
+83.85
+</td>
+<td style="text-align:right;">
+213.60
+</td>
+<td style="text-align:right;">
+458.18
+</td>
+<td style="text-align:right;">
+16297.1
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Assets
+</td>
+<td style="text-align:left;">
+Short Term Corporate
+</td>
+<td style="text-align:left;">
+Average
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+793.39
+</td>
+<td style="text-align:right;">
+1333.28
+</td>
+<td style="text-align:right;">
+46.1
+</td>
+<td style="text-align:right;">
+146.30
+</td>
+<td style="text-align:right;">
+298.10
+</td>
+<td style="text-align:right;">
+605.20
+</td>
+<td style="text-align:right;">
+5701.6
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Assets
+</td>
+<td style="text-align:left;">
+Short Term Corporate
+</td>
+<td style="text-align:left;">
+Below average
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+573.89
+</td>
+<td style="text-align:right;">
+1492.79
+</td>
+<td style="text-align:right;">
+17.4
+</td>
+<td style="text-align:right;">
+70.80
+</td>
+<td style="text-align:right;">
+125.65
+</td>
+<td style="text-align:right;">
+220.95
+</td>
+<td style="text-align:right;">
+6981.5
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+</tbody>
+</table>
+<p>]</p>
+<hr />
+</div>
+<div id="first-graphs" class="section level2">
+<h2>First Graphs</h2>
+<p>count: false</p>
+<p>.panel1-Fig1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(x=`Return 2009`, fill=Type))   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Fig1-auto[
+<img src="index_files/figure-html/Fig1_auto_01_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-Fig1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(x=`Return 2009`, fill=Type)) +
+  geom_density(alpha = 0.3) +
+  scale_xaringan_fill_discrete()   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Fig1-auto[
+<img src="index_files/figure-html/Fig1_auto_03_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-Fig1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(x=`Return 2009`, fill=Type)) +
+  geom_density(alpha = 0.3) +
+  scale_xaringan_fill_discrete() +
+  theme_xaringan() +
+  facet_wrap(vars(Risk))   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Fig1-auto[
+<img src="index_files/figure-html/Fig1_auto_05_output-1.jpeg" width="672" />]</p>
+</div>
+</div>
+<div id="we-can-graph-exactly-that" class="section level1">
+<h1>We Can Graph Exactly That</h1>
+<p>count: false</p>
+<p>.panel1-Box1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(y=`Return 2009`, x=Type, color=Type))   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Box1-auto[
+<img src="index_files/figure-html/Box1_auto_01_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-Box1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(y=`Return 2009`, x=Type, color=Type)) +
+  geom_boxplot(alpha = 0.3) +
+  guides(color=FALSE)   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Box1-auto[
+<img src="index_files/figure-html/Box1_auto_03_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-Box1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(y=`Return 2009`, x=Type, color=Type)) +
+  geom_boxplot(alpha = 0.3) +
+  guides(color=FALSE) +
+  scale_color_viridis_d() +
+  theme_xaringan()   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Box1-auto[
+<img src="index_files/figure-html/Box1_auto_05_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-Box1-auto[</p>
+<pre class="r"><code>Bonds %&gt;% ggplot(., aes(y=`Return 2009`, x=Type, color=Type)) +
+  geom_boxplot(alpha = 0.3) +
+  guides(color=FALSE) +
+  scale_color_viridis_d() +
+  theme_xaringan() +
+  facet_wrap(vars(Risk)) +
+  labs(title=&quot;2009 Returns by Risk and Type&quot;, y=&quot;Returns in 2009&quot;)   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-Box1-auto[
+<img src="index_files/figure-html/Box1_auto_07_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-RTC-auto[</p>
+<pre class="r"><code>Bonds   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-RTC-auto[</p>
+<pre><code>## # A tibble: 184 x 9
+##    `Fund Number` Type  Assets Fees  `Expense Ratio` `Return 2009`
+##    &lt;chr&gt;         &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;         &lt;dbl&gt;
+##  1 FN-1          Inte…  7268. No               0.45           6.9
+##  2 FN-2          Inte…   475. No               0.5            9.8
+##  3 FN-3          Inte…   193  No               0.71           6.3
+##  4 FN-4          Inte… 18604. No               0.13           5.4
+##  5 FN-5          Inte…   143. No               0.6            5.9
+##  6 FN-6          Inte…  1402. No               0.54           5.7
+##  7 FN-7          Inte…   986. No               0.49           3  
+##  8 FN-8          Inte…  2189. No               0.55           7.4
+##  9 FN-9          Inte…   391. No               0.67           5.3
+## 10 FN-10         Inte…   544. No               0.63           5.7
+## # … with 174 more rows, and 3 more variables: `3-Year Return` &lt;dbl&gt;, `5-Year
+## #   Return` &lt;dbl&gt;, Risk &lt;chr&gt;</code></pre>
+<p>]</p>
+<p>count: false</p>
+<p>.panel1-RTC-auto[</p>
+<pre class="r"><code>Bonds %&gt;%
+  group_by(Type,Risk) %&gt;%
+  summarise(Count = n())   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-RTC-auto[</p>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   Type [2]
+##   Type                    Risk          Count
+##   &lt;chr&gt;                   &lt;chr&gt;         &lt;int&gt;
+## 1 Intermediate Government Above average    29
+## 2 Intermediate Government Average          32
+## 3 Intermediate Government Below average    26
+## 4 Short Term Corporate    Above average    30
+## 5 Short Term Corporate    Average          37
+## 6 Short Term Corporate    Below average    30</code></pre>
+<p>]</p>
+<p>count: false</p>
+<p>.panel1-RTC-auto[</p>
+<pre class="r"><code>Bonds %&gt;%
+  group_by(Type,Risk) %&gt;%
+  summarise(Count = n()) %&gt;%
+  ggplot(., aes(x=Type, y=Risk, fill=Count)) +
+  geom_tile()   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-RTC-auto[
+<img src="index_files/figure-html/RTC_auto_05_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-RTC-auto[</p>
+<pre class="r"><code>Bonds %&gt;%
+  group_by(Type,Risk) %&gt;%
+  summarise(Count = n()) %&gt;%
+  ggplot(., aes(x=Type, y=Risk, fill=Count)) +
+  geom_tile() +
+  labs(title=&quot;Funds by Risk and Type&quot;, y=&quot;Risk&quot;, x=&quot;Type&quot;)+
+  scale_xaringan_fill_continuous()   #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-RTC-auto[
+<img src="index_files/figure-html/RTC_auto_07_output-1.jpeg" width="672" />]</p>
+<p>count: false</p>
+<p>.panel1-RTC-auto[</p>
+<pre class="r"><code>Bonds %&gt;%
+  group_by(Type,Risk) %&gt;%
+  summarise(Count = n()) %&gt;%
+  ggplot(., aes(x=Type, y=Risk, fill=Count)) +
+  geom_tile() +
+  labs(title=&quot;Funds by Risk and Type&quot;, y=&quot;Risk&quot;, x=&quot;Type&quot;)+
+  scale_xaringan_fill_continuous() +
+  theme_xaringan() +
+  theme(axis.text.x = element_text(angle = 45, size=12))  #&lt;&lt;</code></pre>
+<p>]</p>
+<p>.panel2-RTC-auto[
+<img src="index_files/figure-html/RTC_auto_09_output-1.jpeg" width="672" />]</p>
+<style>
+.panel1-RTC-auto {
+  color: black;
+  width: 38.6060606060606%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel2-RTC-auto {
+  color: black;
+  width: 59.3939393939394%;
+  hight: 32%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+.panel3-RTC-auto {
+  color: black;
+  width: NA%;
+  hight: 33%;
+  float: left;
+  padding-left: 1%;
+  font-size: 80%
+}
+</style>
+<div id="installing-packages" class="section level2">
+<h2>Installing packages</h2>
+<p>R works by packages that add functionality. The process is two parts: install a package [install.packages(“package”)] and then use it [library(package)].</p>
+<p>R can handle installation for you. In general, unless you know what it means, avoid compiling from source; binary packages are preferred.</p>
+<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;,&quot;skimr&quot;,&quot;magrittr&quot;,&quot;swirl&quot;,&quot;hrbrthemes&quot;,&quot;ggthemes&quot;))</code></pre>
+<p>For your lab assignment, you will need</p>
+<pre class="r"><code>install.packages(c(&quot;swirl&quot;))</code></pre>
+<p>–</p>
+<p>The <a href="https://www.rstudio.com/products/rstudio/">RStudio IDE</a>, is highly recommended but you do not have to. The command line or the base GUI work but you will have to type to render RMarkdown and I use it alot.</p>
+</div>
+</div>
+<div id="takeaways" class="section level1">
+<h1>Takeaways</h1>
+<div id="the-biggest-barrier-to-learning-from-data-is-not-having-a-useful-pipeline." class="section level2">
+<h2>1. The biggest barrier to learning from data is not having a useful pipeline.</h2>
+</div>
+<div id="data-should-be-tidy-and-easy-to-analyse.-we-spend-time-analysing-rather-than-cleaning." class="section level2">
+<h2>2. Data should be tidy and easy to analyse. We spend time analysing rather than cleaning.</h2>
+</div>
+<div id="r-makes-getting-data-in-and-out-easy.-it-links-with-tons-of-things." class="section level2">
+<h2>3. R makes getting data in and out easy. It links with tons of things.</h2>
+</div>
+<div id="r-with-markdown-make-automated-report-writing-and-other-literate-uses-of-data-graphics-and-text-easy-to-do." class="section level2">
+<h2>4. R with Markdown make automated report writing and other literate uses of data, graphics, and text easy to do.</h2>
+</div>
+<div id="the-assignment-for-this-week-involves-practicing-this." class="section level2">
+<h2>5. The assignment for this week involves practicing this.</h2>
+<ol start="6" style="list-style-type: decimal">
+<li>There is a worked example in <code>Resources &gt; R Documents &gt; HOWTOExcel</code> to work with.</li>
+</ol>
+</div>
+</div>
